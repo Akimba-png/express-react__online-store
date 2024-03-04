@@ -1,4 +1,4 @@
-import { ApiError } from './../error/api-error';
+import { ApiError } from './../error/api-error.js';
 
 export const errorMiddleware = (err, _req, res, _next) => {
   if (err instanceof ApiError) {

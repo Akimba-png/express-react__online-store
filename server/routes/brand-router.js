@@ -1,5 +1,5 @@
 import Router from 'express';
-import { brandController } from '../controllers/brand-controller';
+import { brandController } from '../controllers/brand-controller.js';
 
 const brandRouter = Router();
 
