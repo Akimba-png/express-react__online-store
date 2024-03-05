@@ -25,9 +25,23 @@ class DeviceController {
 
   async getAll(req, res, next) {
     try {
-
+      const { typeId, brandId } = req.query;
+      let devices;
+      if (!typeId && !brandId) {
+        devices = await Device.findAll();
+      }
+      if (!typeId && brandId) {
+        devices = await Device.findAll({ where: { brandId }});
+      }
+      if (typeId && !brandId) {
+        devices = await Device.findAll({ where: { typeId }});
+      }
+      if (typeId && brandId) {
+        devices = await Device.findAll( { where: { typeId, brandId }});
+      }
+      return res.status(200).json(devices);
     } catch (error) {
-
+      next(ApiError.badRequest(`db error happened: ${ error.message }`));
     }
   }
 
