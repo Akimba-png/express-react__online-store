@@ -5,12 +5,14 @@ import { sequelize } from './db/db.js';
 import './models/models.js';
 import { router } from './routes/index.js';
 import { errorMiddleware } from './middlewares/error-middleware.js';
+import fileUpload from 'express-fileupload';
 
 const PORT = process.env.PORT ?? 5000;
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(fileUpload({}));
 app.use('/api', router);
 app.use(errorMiddleware);
 
