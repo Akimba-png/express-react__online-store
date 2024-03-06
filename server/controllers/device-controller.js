@@ -72,9 +72,14 @@ class DeviceController {
 
   async getOne(req, res, next) {
     try {
-
+      const { id } = req.params;
+      const device = await Device.findOne({
+        where: { id },
+        include: [{ model: DeviceInfo }],
+      });
+      res.status(200).json(device);
     } catch (error) {
-
+      next(ApiError.badRequest(`db error happened ${ error.message }`));
     }
   }
 }
