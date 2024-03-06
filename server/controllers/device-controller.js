@@ -31,16 +31,24 @@ class DeviceController {
       limit = limit ?? 9;
       const offset = page * limit - limit;
       if (!typeId && !brandId) {
-        devices = await Device.findAll({ limit, offset });
+        devices = await Device.findAndCountAll({ limit, offset });
       }
       if (!typeId && brandId) {
-        devices = await Device.findAll({ where: { brandId }, limit, offset });
+        devices = await Device.findAndCountAll({
+          where: { brandId },
+          limit,
+          offset,
+        });
       }
       if (typeId && !brandId) {
-        devices = await Device.findAll({ where: { typeId }, limit, offset });
+        devices = await Device.findAndCountAll({
+          where: { typeId },
+          limit,
+          offset,
+        });
       }
       if (typeId && brandId) {
-        devices = await Device.findAll({
+        devices = await Device.findAndCountAll({
           where: { typeId, brandId },
           limit,
           offset,
