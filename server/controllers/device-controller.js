@@ -75,7 +75,7 @@ class DeviceController {
       const { id } = req.params;
       const device = await Device.findOne({
         where: { id },
-        include: [{ model: DeviceInfo }],
+        include: [{ model: DeviceInfo, as: 'info' }],
       });
       res.status(200).json(device);
     } catch (error) {
