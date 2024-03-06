@@ -1,4 +1,4 @@
-import { Device } from '../models/models.js';
+import { Device, DeviceInfo } from '../models/models.js';
 import { ApiError } from '../error/api-error.js';
 import { v4 as uuidv4} from 'uuid';
 import path from 'node:path';
@@ -6,7 +6,7 @@ import path from 'node:path';
 class DeviceController {
   async create(req, res, next) {
     try {
-      const { name, price, typeId, brandId } = req.body;
+      let { name, price, typeId, brandId, info } = req.body;
       const { img } = req.files;
       let fileName = uuidv4() + '.jpg';
       img.mv(path.resolve('static', fileName));
@@ -17,6 +17,16 @@ class DeviceController {
         brandId,
         img: fileName,
       });
+      if (info) {
+        info = JSON.parse(info);
+        info.forEach(async (e) => {
+          await DeviceInfo.create({
+            title: e.title,
+            description: e.description,
+            deviceId: device.id,
+          });
+        });
+      }
       return res.status(201).json(device);
     } catch (error) {
       next(ApiError.badRequest(`db error happened: ${ error.message }`));
