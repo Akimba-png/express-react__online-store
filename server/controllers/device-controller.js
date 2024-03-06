@@ -25,19 +25,26 @@ class DeviceController {
 
   async getAll(req, res, next) {
     try {
-      const { typeId, brandId } = req.query;
+      let { typeId, brandId, limit, page } = req.query;
       let devices;
+      page = page ?? 1;
+      limit = limit ?? 9;
+      const offset = page * limit - limit;
       if (!typeId && !brandId) {
-        devices = await Device.findAll();
+        devices = await Device.findAll({ limit, offset });
       }
       if (!typeId && brandId) {
-        devices = await Device.findAll({ where: { brandId }});
+        devices = await Device.findAll({ where: { brandId }, limit, offset });
       }
       if (typeId && !brandId) {
-        devices = await Device.findAll({ where: { typeId }});
+        devices = await Device.findAll({ where: { typeId }, limit, offset });
       }
       if (typeId && brandId) {
-        devices = await Device.findAll( { where: { typeId, brandId }});
+        devices = await Device.findAll({
+          where: { typeId, brandId },
+          limit,
+          offset,
+        });
       }
       return res.status(200).json(devices);
     } catch (error) {
