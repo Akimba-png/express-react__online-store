@@ -5,7 +5,7 @@ class UserController {
   async registration(req, res, next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return next(ApiError.badRequest('form validation error'));
+      return next(ApiError.badRequest('form validation error', errors));
     }
     try {
 
@@ -18,7 +18,7 @@ class UserController {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return next(ApiError.badRequest('form validation error'));
+        return next(ApiError.badRequest('form validation error', errors));
       }
     } catch (error) {
 
