@@ -2,6 +2,8 @@ import { validationResult } from 'express-validator';
 import { ApiError } from '../error/api-error.js';
 import { User } from '../models/models.js';
 import bcrypt from 'bcrypt';
+import { UserDto } from '../dtos/user-dto.js';
+import { tokenService } from '../services/token-service.js';
 
 const SALT = 5;
 
@@ -25,6 +27,9 @@ class UserController {
         password: hashedPassword,
       };
       const createdUser = await User.create(candidate);
+      const userDto = new UserDto(createdUser);
+      const jwt = tokenService.generateTokens({ ...userDto });
+      userDto.accessToken = jwt.accessToken;
     } catch (error) {
 
     }
