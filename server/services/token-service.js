@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { AuthToken } from '../models/models.js';
 
 class TokenService {
   constructor() {
@@ -12,6 +13,15 @@ class TokenService {
       accessToken,
       refreshToken,
     };
+  }
+  async saveToken(userId, refreshToken) {
+    const tokenData = await AuthToken.findOne({ where: { userId } });
+    if (tokenData) {
+      tokenData.token = refreshToken;
+      return await tokenData.save();
+    }
+    const token = await AuthToken.create({ userId, token: refreshToken });
+    return token;
   }
 }
 

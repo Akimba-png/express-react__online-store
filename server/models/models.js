@@ -12,6 +12,11 @@ const Basket = sequelize.define('basket', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 });
 
+const AuthToken = sequelize.define('auth_token', {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  token: { type: DataTypes.STRING, unique: true },
+});
+
 const BasketDevice = sequelize.define('basket_device', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 });
@@ -52,6 +57,9 @@ const DeviceInfo = sequelize.define('device_info', {
 User.hasOne(Basket);
 Basket.belongsTo(User);
 
+User.hasOne(AuthToken);
+AuthToken.belongsTo(User);
+
 User.hasMany(Rating);
 Rating.belongsTo(User);
 
@@ -78,6 +86,7 @@ Brand.belongsToMany(Type, { through: TypeBrand });
 
 export {
   User,
+  AuthToken,
   Basket,
   BasketDevice,
   Device,

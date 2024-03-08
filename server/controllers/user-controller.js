@@ -30,6 +30,7 @@ class UserController {
       const userDto = new UserDto(createdUser);
       const jwt = tokenService.generateTokens({ ...userDto });
       userDto.accessToken = jwt.accessToken;
+      await tokenService.saveToken(userDto.id, jwt.refreshToken);
     } catch (error) {
 
     }
