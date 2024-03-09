@@ -38,7 +38,7 @@ class UserController {
       );
       res.status(201).json(userDto);
     } catch (error) {
-
+      next(error);
     }
   }
 
