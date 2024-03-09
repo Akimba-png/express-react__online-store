@@ -1,6 +1,6 @@
 import { UserDto } from '../dtos/user-dto.js';
 import { ApiError } from '../error/api-error.js';
-import { User } from '../models/models.js';
+import { Basket, User } from '../models/models.js';
 import bcrypt from 'bcrypt';
 import { tokenService } from './token-service.js';
 
@@ -22,6 +22,7 @@ class UserService {
     const jwt = tokenService.generateTokens({ ...userDto });
     userDto.accessToken = jwt.accessToken;
     await tokenService.saveToken(userDto.id, jwt.refreshToken);
+    await Basket.create({ userId: userDto.id });
     return {
       user: userDto,
       refreshToken: jwt.refreshToken,
