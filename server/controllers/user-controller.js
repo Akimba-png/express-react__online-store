@@ -1,11 +1,6 @@
 import { validationResult } from 'express-validator';
 import { ApiError } from '../error/api-error.js';
-import { User } from '../models/models.js';
-import bcrypt from 'bcrypt';
-import { UserDto } from '../dtos/user-dto.js';
-import { tokenService } from '../services/token-service.js';
-
-const SALT = 5;
+import { userService } from '../services/user-service.js';
 
 class UserController {
   async registration(req, res, next) {
@@ -15,28 +10,13 @@ class UserController {
         return next(ApiError.badRequest('form validation error', errors));
       }
       const { email, password } = req.body;
-      let candidate = await User.findOne({ where: { email } });
-      if (candidate) {
-        return next(
-          ApiError.badRequest(`user with email ${email} is already exists`)
-        );
-      }
-      const hashedPassword = await bcrypt.hash(password, SALT);
-      candidate = {
-        email,
-        password: hashedPassword,
-      };
-      const createdUser = await User.create(candidate);
-      const userDto = new UserDto(createdUser);
-      const jwt = tokenService.generateTokens({ ...userDto });
-      userDto.accessToken = jwt.accessToken;
-      await tokenService.saveToken(userDto.id, jwt.refreshToken);
+      const userData = await userService.registration(email, password);
       res.cookie(
         'refreshToken',
-        jwt.refreshToken,
+        userData.refreshToken,
         { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true },
       );
-      res.status(201).json(userDto);
+      res.status(201).json(userData.user);
     } catch (error) {
       next(error);
     }
