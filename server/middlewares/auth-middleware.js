@@ -1,4 +1,7 @@
 const authMiddleware = (req, _res, next) => {
+  if (req.method === 'OPTIONS') {
+    return next();
+  }
   try {
     const authorization = req.headers.authorization;
     if (!authorization) {
