@@ -33,6 +33,18 @@ class TokenService {
       return null;
     }
   }
+  verifyRefreshToken(token) {
+    try {
+      const userData = jwt.verify(token, this.refreshKey);
+      return userData;
+    } catch (error) {
+      return null;
+    }
+  }
+  async findToken(token) {
+    const refreshToken = await AuthToken.findOne({ where: { token } });
+    return refreshToken;
+  }
 }
 
 export const tokenService = new TokenService();

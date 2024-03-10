@@ -58,6 +58,25 @@ class UserService {
       refreshToken: jwt.refreshToken,
     };
   }
+
+  async refresh(refreshToken) {
+    if (!refreshToken) {
+      throw ApiError.unAuthorized();
+    }
+    const userData = tokenService.verifyRefreshToken(refreshToken);
+    const tokenData = tokenService.findToken(refreshToken);
+    if (!userData || !tokenData) {
+      throw ApiError.unAuthorized();
+    }
+    const userDto = new UserDto(userData);
+    const jwt = tokenService.generateTokens({ ...userDto });
+    await tokenService.saveToken(userDto.id, jwt.refreshToken);
+    userDto.accessToken = jwt.accessToken;
+    return {
+      user: userDto,
+      refreshToken: jwt.refreshToken,
+    };
+  }
 }
 
 export const userService = new UserService();
