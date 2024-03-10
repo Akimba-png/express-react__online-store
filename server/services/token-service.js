@@ -45,6 +45,9 @@ class TokenService {
     const refreshToken = await AuthToken.findOne({ where: { token } });
     return refreshToken;
   }
+  async deleteToken(token) {
+    await AuthToken.destroy({ where: { token } });
+  }
 }
 
 export const tokenService = new TokenService();

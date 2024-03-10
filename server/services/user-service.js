@@ -77,6 +77,13 @@ class UserService {
       refreshToken: jwt.refreshToken,
     };
   }
+
+  async logout(refreshToken) {
+    if (!refreshToken) {
+      throw ApiError.unAuthorized();
+    }
+    await tokenService.deleteToken(refreshToken);
+  }
 }
 
 export const userService = new UserService();

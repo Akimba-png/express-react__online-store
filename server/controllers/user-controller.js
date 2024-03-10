@@ -70,6 +70,17 @@ class UserController {
       next(error);
     }
   }
+
+  async logout(req, res, next) {
+    try {
+      const { refreshToken } = req.cookies;
+      await userService.logout(refreshToken);
+      res.clearCookie('refreshToken');
+      res.status(200).json({ message: 'user successfuly logged out' });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export const userController = new UserController();
