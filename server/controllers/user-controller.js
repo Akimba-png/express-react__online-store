@@ -55,6 +55,15 @@ class UserController {
       next(error);
     }
   }
+
+  async refresh(req, res, next) {
+    try {
+      const refreshToken = req.cookies.refreshToken;
+
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export const userController = new UserController();

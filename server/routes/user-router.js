@@ -18,5 +18,6 @@ userRouter.post(
   userController.login
 );
 userRouter.get('/auth', authMiddleware, userController.checkAuth);
+userRouter.get('/refresh', userController.refresh);
 
 export { userRouter };
