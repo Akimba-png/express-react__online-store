@@ -1,6 +1,7 @@
 import Router from 'express';
 import { userController } from '../controllers/user-controller.js';
 import { body } from 'express-validator';
+import { authMiddleware } from '../middlewares/auth-middleware.js'
 
 const userRouter = Router();
 
@@ -16,6 +17,6 @@ userRouter.post(
   body('password').isLength({ min: 2, max: 10 }),
   userController.login
 );
-userRouter.get('/auth', userController.check);
+userRouter.get('/auth', authMiddleware, userController.checkAuth);
 
 export { userRouter };

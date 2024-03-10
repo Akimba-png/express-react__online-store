@@ -47,6 +47,17 @@ class UserService {
       refreshToken: jwt.refreshToken,
     };
   }
+
+  async checkAuth(userData) {
+    const userDto = new UserDto(userData);
+    const jwt = tokenService.generateTokens({ ...userDto });
+    await tokenService.saveToken(userDto.id, jwt.refreshToken);
+    userDto.accessToken = jwt.accessToken;
+    return {
+      user: userDto,
+      refreshToken: jwt.refreshToken,
+    };
+  }
 }
 
 export const userService = new UserService();
