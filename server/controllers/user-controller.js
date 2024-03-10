@@ -28,8 +28,16 @@ class UserController {
       if (!errors.isEmpty()) {
         return next(ApiError.badRequest('form validation error', errors));
       }
+      const { email, password } = req.body;
+      const userData = await userService.login(email, password);
+      res.cookie(
+        'refreshToken',
+        userData.refreshToken,
+        { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true },
+      );
+      res.status(200).json(userData.user);
     } catch (error) {
-
+      next(error);
     }
   }
 

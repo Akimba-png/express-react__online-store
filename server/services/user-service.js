@@ -28,6 +28,25 @@ class UserService {
       refreshToken: jwt.refreshToken,
     };
   }
+
+  async login(email, password) {
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      throw ApiError.badRequest(`email ${email} is not registered`);
+    }
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    if (!isPasswordCorrect) {
+      throw ApiError.badRequest(`email or password is incorrect`);
+    }
+    const userDto = new UserDto(user);
+    const jwt = tokenService.generateTokens({ ...userDto });
+    await tokenService.saveToken(userDto.id, jwt.refreshToken);
+    userDto.accessToken = jwt.accessToken;
+    return {
+      user: userDto,
+      refreshToken: jwt.refreshToken,
+    };
+  }
 }
 
 export const userService = new UserService();
