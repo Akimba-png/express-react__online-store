@@ -1,4 +1,7 @@
-const authMiddleware = (req, _res, next) => {
+import { tokenService } from '../services/token-service.js';
+import { ApiError } from '../error/api-error.js';
+
+export const authMiddleware = (req, _res, next) => {
   if (req.method === 'OPTIONS') {
     return next();
   }
