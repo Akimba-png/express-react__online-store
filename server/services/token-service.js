@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { AuthToken } from '../models/models.js';
+import { ApiError } from '../error/api-error.js';
 
 class TokenService {
   constructor() {
@@ -22,6 +23,15 @@ class TokenService {
     }
     const token = await AuthToken.create({ userId, token: refreshToken });
     return token;
+  }
+  verifyAccessToken(token) {
+    try {
+      const userData = jwt.verify(token, this.accessKey);
+      return userData;
+    }
+    catch (error) {
+      return null;
+    }
   }
 }
 
