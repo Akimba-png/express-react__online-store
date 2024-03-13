@@ -1,12 +1,16 @@
 import { RouterProvider } from 'react-router-dom';
 import { setupRouter } from './router/setup-router';
-import { AuthStatus } from './utils/const';
+import { useContext } from 'react';
+import { StoreContext } from './main';
+import { observer } from 'mobx-react-lite';
 
-function App() {
-  const router = setupRouter(AuthStatus.Auth);
+function AppComponent() {
+  const store = useContext(StoreContext);
+  const { user } = store;
+  const router = setupRouter(user.authStatus);
   return (
     <RouterProvider router={router} />
   );
 }
 
-export { App };
+export const App = observer(AppComponent);
