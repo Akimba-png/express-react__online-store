@@ -1,7 +1,7 @@
 import { RouterProvider } from 'react-router-dom';
 import { setupRouter } from './router/setup-router';
 import { useContext } from 'react';
-import { StoreContext } from './main';
+import { StoreContext } from './store/contexts';
 import { observer } from 'mobx-react-lite';
 
 function AppComponent() {
